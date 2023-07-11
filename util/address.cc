@@ -13,7 +13,7 @@
 
 using namespace std;
 
-//! Converts Raw to `sockaddr *`.
+//! Converts Raw to `sockaddr *`. 将Raw转换为' sockaddr * '
 Address::Raw::operator sockaddr*()
 {
   return reinterpret_cast<sockaddr*>( &storage ); // NOLINT(*-reinterpret-cast)

@@ -79,7 +79,7 @@ FileDescriptor FileDescriptor::duplicate() const
   return FileDescriptor { internal_fd_ };
 }
 
-// buffer is the string to be read into
+// buffer is the string to be read into  buffer是要读入的字符串
 void FileDescriptor::read( string& buffer )
 {
   buffer.clear();
