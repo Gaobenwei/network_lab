@@ -15,13 +15,18 @@ protected:
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
   //请在此向ByteStream添加任何附加状态，而不要向Writer和Reader接口添加。
   //提示:这根本不需要复杂的数据结构，但如果任何测试花费的时间超过一秒，那就表明您可能希望继续探索不同的方法。
-  std::queue<std::string> data_queue_ {};
-  std::queue<std::string_view> view_queue_ {};
-  bool is_closed_{ false };
-  bool has_error_{ false };
-  uint64_t bytes_pushed_{ 0 }; // 已经推送的字节数
-  uint64_t bytes_popped_{ 0 }; // 已经弹出的字节数
-  uint64_t bytes_buffered_{ 0 }; // 缓冲区中的字节数
+  
+  
+  //std::queue<std::string> data_queue_ {};
+  std::deque<std::string> data_queue_ {};
+  //std::queue<std::string_view> view_queue_ {};  //会出现bug1，原因未知
+  std::deque<std::string_view> view_queue_ {};
+  bool is_closed_ {false};
+  bool has_error_ {false};
+  uint64_t bytes_buffered_ {0};
+  uint64_t bytes_pushed_ {0};
+  uint64_t bytes_popped_ {0};
+  
 
 public:
   explicit ByteStream( uint64_t capacity );

@@ -17,22 +17,20 @@ Then you will need to print out everything the server sends back,(not just one c
   然后，您需要打印出服务器发回的所有内容(不仅仅是对read()的一次调用——所有内容)，直到到达“eof”(文件结束)为止。*/
 
   //创建一个socket对象
-  TCPSocket socket;
   //连接到主机
-  socket.connect(Address(host, "http"));
   //发送请求
-  socket.write("GET " + path + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n\r\n");
-
-  while(!socket.eof())
-  {
-    //判断是否到达文件末尾，如果没有到达文件末尾，就一直读取
-    std::string data;
-    socket.read(data);
-    cout << data;
-  }
   //关闭socket
-  socket.close();
-
+  TCPSocket soc;
+  soc.connect(Address(host,"http"));
+  soc.write("GET "+path+" HTTP/1.1\r\n"+"Host: "+host+"\r\n"+"Connection: close\r\n\r\n");
+  while(!soc.eof())
+  {
+    std::string data;
+    soc.read(data);
+    cout<<data;
+  }
+  //读取字节数目前不知道是否变化
+  soc.close();
   cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
   cerr << "Warning: get_URL() has not been implemented yet.\n";
 }

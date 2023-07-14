@@ -9,17 +9,18 @@ ByteStream::ByteStream( uint64_t capacity ) : capacity_( capacity ) {}
 void Writer::push( string data )
 {
   // Your code here.
-  if(available_capacity()==0||data.empty())
+  if(data.empty()||available_capacity()==0)
     return;
-  auto const len=std::min(available_capacity(),data.size());
-  if(len<data.size())
+  auto n=std::min(data.size(),available_capacity());
+  if(n<data.size())  //要对string data进行截断
   {
-    data=data.substr(0,len);
+    data=data.substr(0,n);
   }
-  data_queue_.push(std::move(data));
-  //view_queue_.push(std::string_view(data_queue_.back()));
-  bytes_pushed_+=len;
-  bytes_buffered_+=len;
+  data_queue_.push_back(std::move(data));
+  //view_queue_.push(data_queue_.back());
+  view_queue_.emplace_back(data_queue_.back().c_str(),n);
+  bytes_buffered_+=n;
+  bytes_pushed_+=n;
 }
 
 void Writer::close()
@@ -54,10 +55,15 @@ uint64_t Writer::bytes_pushed() const
 
 string_view Reader::peek() const
 {
-  // Your code here.
+  //Your code here.
   if(data_queue_.empty())
     return {};
   return data_queue_.front();
+  /* bug1以下会出错*/
+  // if(view_queue_.empty())
+  //   return {};
+  // return view_queue_.front();
+  
 }
 
 bool Reader::is_finished() const
@@ -77,25 +83,50 @@ bool Reader::has_error() const
 void Reader::pop( uint64_t len )
 {
   // Your code here.
+  // if(len==0)
+  //   return;
+  // auto n=std::min(len,bytes_buffered_);
+  // for(;n!=0;)
+  // {
+  //   auto size=data_queue_.front().size();
+  //   if(n>=size)
+  //   {
+  //     n-=size;
+  //     bytes_popped_+=size;
+  //     bytes_buffered_-=size;
+  //     //view_queue_.pop();
+  //     data_queue_.pop();
+  //   }
+  //   else
+  //   {
+  //     bytes_popped_+=n;
+  //     bytes_buffered_-=n;
+  //     //view_queue_.front().remove_prefix(n);
+  //     data_queue_.front().erase(0,n);
+  //     return;
+  //   }
+  // }
+
   if(len==0)
     return;
   auto n=std::min(len,bytes_buffered_);
-  for(;n!=0;)
+  while(n!=0)
   {
-    auto size=data_queue_.front().size();
+    auto size=view_queue_.front().size();
+    //原因在此，size如果是用的data_queue_的size，那么就会出错,因为data_queue_的size是string的size，而不是string_view的size，两者的不同之处在于string_view的size是不包含'\0'的，（这句话是copilot说的，有待查证）
     if(n>=size)
     {
       n-=size;
       bytes_popped_+=size;
       bytes_buffered_-=size;
-      //view_queue_.pop();
-      data_queue_.pop();
+      view_queue_.pop_front();
+      data_queue_.pop_front();
     }
-    else
-    {
+    else{
       bytes_popped_+=n;
       bytes_buffered_-=n;
-      //view_queue_.front().remove_prefix(n);
+      //应该是这里出错了，否定这个猜测
+      view_queue_.front().remove_prefix(n);
       data_queue_.front().erase(0,n);
       return;
     }
