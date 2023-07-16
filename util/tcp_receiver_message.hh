@@ -17,6 +17,12 @@
  *    the <cstdint> header).
  */
 
+/*TCPReceiverMessage结构包含了从TCP接收方发送到发送方的信息。
+*包含两个字段:
+
+* 1)确认号(ackno): TCP接收方需要的下一个序列号。这是一个可选字段，如果tcreceiver还没有接收到初始序列号，则该字段为空。
+* 2)窗口大小。这是TCP接收方有兴趣接收的序列号的数量，从存在的确认号开始。最大值是65,535(头部的UINT16_MAX)。*/
+
 struct TCPReceiverMessage
 {
   std::optional<Wrap32> ackno {};
