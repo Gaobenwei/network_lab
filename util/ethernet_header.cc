@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//! \returns A string with a textual representation of an Ethernet address
+//! \returns A string with a textual representation of an Ethernet address 返回一个带有以太网地址文本表示形式的字符串
 string to_string( const EthernetAddress address )
 {
   stringstream ss {};
@@ -19,7 +19,7 @@ string to_string( const EthernetAddress address )
   return ss.str();
 }
 
-//! \returns A string with the header's contents
+//! \returns A string with the header's contents 返回一个包含头部内容的字符串
 string EthernetHeader::to_string() const
 {
   stringstream ss {};
@@ -43,32 +43,32 @@ string EthernetHeader::to_string() const
 
 void EthernetHeader::parse( Parser& parser )
 {
-  // read destination address
+  // read destination address //读取目的地址
   for ( auto& b : dst ) {
     parser.integer( b );
   }
 
-  // read source address
+  // read source address //读取源地址
   for ( auto& b : src ) {
     parser.integer( b );
   }
 
-  // read frame type (e.g. IPv4, ARP, or something else)
+  // read frame type (e.g. IPv4, ARP, or something else) //读取帧类型(例如IPv4, ARP或其他)
   parser.integer( type );
 }
 
 void EthernetHeader::serialize( Serializer& serializer ) const
 {
-  // write destination address
+  // write destination address 写入目的地址
   for ( const auto& b : dst ) {
     serializer.integer( b );
   }
 
-  // write source address
+  // write source address 写入源地址
   for ( const auto& b : src ) {
     serializer.integer( b );
   }
 
-  // write frame type (e.g. IPv4, ARP, or something else)
+  // write frame type (e.g. IPv4, ARP, or something else) 写帧类型(例如IPv4、ARP或其他)
   serializer.integer( type );
 }

@@ -6,16 +6,16 @@
 #include <cstdint>
 #include <string>
 
-// Helper type for an Ethernet address (an array of six bytes)
+// Helper type for an Ethernet address (an array of six bytes) 以太网地址的辅助类型（由六个字节组成的数组）
 using EthernetAddress = std::array<uint8_t, 6>;
 
-// Ethernet broadcast address (ff:ff:ff:ff:ff:ff)
+// Ethernet broadcast address (ff:ff:ff:ff:ff:ff) 以太网广播地址
 constexpr EthernetAddress ETHERNET_BROADCAST = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 
-// Printable representation of an EthernetAddress
+// Printable representation of an EthernetAddress EthernetAddress的可打印表示形式
 std::string to_string( EthernetAddress address );
 
-// Ethernet frame header
+// Ethernet frame header 以太网帧报头
 struct EthernetHeader
 {
   static constexpr size_t LENGTH = 14;         //!< Ethernet header length in bytes
@@ -26,7 +26,7 @@ struct EthernetHeader
   EthernetAddress src;
   uint16_t type;
 
-  // Return a string containing a header in human-readable format
+  // Return a string containing a header in human-readable format 返回一个包含人类可读格式的头文件的字符串
   std::string to_string() const;
 
   void parse( Parser& parser );

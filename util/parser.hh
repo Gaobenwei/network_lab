@@ -205,6 +205,7 @@ public:
 };
 
 // Helper to serialize any object (without constructing a Serializer of the caller's own)
+// 序列化任何对象的助手（无需构建调用者自己的序列化器）
 template<class T>
 std::vector<Buffer> serialize( const T& obj )
 {
@@ -214,6 +215,7 @@ std::vector<Buffer> serialize( const T& obj )
 }
 
 // Helper to parse any object (without constructing a Parser of the caller's own). Returns true if successful.
+// 用于解析任何对象（无需构建调用者自己的解析器）的助手。 如果成功则返回 true。
 template<class T>
 bool parse( T& obj, const std::vector<Buffer>& buffers )
 {
