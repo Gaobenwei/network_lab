@@ -1,5 +1,6 @@
 #pragma once
 
+#include "buffer.hh"
 #include <cstddef>
 #include <limits>
 #include <memory>
@@ -63,13 +64,14 @@ public:
   ~FileDescriptor() = default;
 
   // Read into `buffer`
-  void read( std::string& buffer ); // read into a string 读入一个字符串 ，返回值为读取的字节数，读取的字符串放在buffer中
-  void read( std::vector<std::unique_ptr<std::string>>& buffers ); // read into a vector of strings 读入一个字符串向量
+  void read( std::string& buffer );
+  void read( std::vector<std::string>& buffers );
 
   // Attempt to write a buffer 写缓冲区
   // returns number of bytes written 返回写入的字节数
   size_t write( std::string_view buffer );
   size_t write( const std::vector<std::string_view>& buffers );
+  size_t write( const std::vector<Buffer>& buffers );
 
   // Close the underlying file descriptor 关闭底层文件描述符
   void close() { internal_fd_->close(); }
